@@ -19,6 +19,7 @@ class Notificacion:
 cola = Cola()
 pila = Stack()
 
+notificacion0 = Notificacion("Instagram", 910, "Carga una historia")
 notificacion1 = Notificacion("Facebook", 1340, "Sócrates te ha seguido")
 notificacion2 = Notificacion("Twitter", 1431, "Elon Musk te ha retwitteado")
 notificacion3 = Notificacion("Twitter", 1467, "Python vs JAVA")
@@ -27,17 +28,23 @@ notificacion5 = Notificacion("Facebook", 1556, "Nietzsche te ha bloquado")
 notificacion6 = Notificacion("Twitter", 1215, "Python: nueva actualización")
 
 
-notificaciones = [notificacion1, notificacion2, notificacion3, notificacion4, notificacion5, notificacion6]
+notificaciones = [notificacion0,notificacion1, notificacion2, notificacion3, notificacion4, notificacion5, notificacion6]
 
+# Cargo las notificaciones
 def cargar():
     for n in notificaciones:
         cola.arrive(n)
 
+# Muestro las notificaciones
 def barrido():
     contador = 0
     while cola.size() > contador:
         noti = cola.move_to_end()
-        print(noti.emite, noti.hora, noti.mensaje)
+        b = len(str(noti.hora)) # Tomo la cantidad de numeros de la hora
+        if b % 2 != 0: # Evaluo. Por el caso de 501, por ejemplo. 
+            print(noti.emite, str(noti.hora)[:1] + ":" + str(noti.hora)[-2:], noti.mensaje) # Si el caso es el mencionado, tomo solo primer término por un lado. 
+        else:
+            print(noti.emite, str(noti.hora)[:2] + ":" + str(noti.hora)[-2:], noti.mensaje) # Sino procedo "normal"
         contador = contador + 1
 
 def byebyefacebook():
@@ -79,7 +86,11 @@ def almacenar():
 def barrido_pila():
     while pila.size() > 0:
         valor = pila.pop()
-        print(valor.emite, valor.hora, valor.mensaje)
+        b = len(str(valor.hora)) # Lo mismo... 
+        if b % 2 != 0:
+            print(valor.emite, str(valor.hora)[:1] + ":" + str(valor.hora)[-2:], valor.mensaje)
+        else:
+            print(valor.emite, str(valor.hora)[:2] + ":" + str(valor.hora)[-2:], valor.mensaje)
 
 def bloque1():
     cargar()
@@ -102,12 +113,13 @@ def bloque3():
     print()
     print("La cantidad de notificaciones que responden a ese horario es de: ")
     almacenar()
-    print("No responden: ")
-    barrido()
-    print()
     print("Responden: ")
     barrido_pila()
+    print()
+    print("No responden: ")
+    barrido()
 
-bloque1()
-bloque2()
-bloque3()
+
+#bloque1()
+#bloque2()
+#bloque3()
